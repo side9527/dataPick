@@ -28,26 +28,6 @@
           <li v-for="(item, index) in monthArr" @click="pickMonth(index + 1)" :key="index">{{item}}</li>
           <span class="m" @click="monthFlag = false;">返回日期选择</span>
         </ul>
-        <!-- <ul class="time" :class="{'minute':!second}" v-if="minFlag">
-          <p :class="{'minute':!second}">
-            <span>时</span>
-            <span>分</span>
-            <span v-if="second">秒</span>
-          </p>
-          <div class="time_btn">
-            <span class="time_cancel" @click="minFlag = false;">返回日期选择</span>
-            <span class="time_ok" @click="pickOver">确定</span>
-          </div>
-          <li>
-            <div v-for="(item, index) in houLength" :class="{'on' : (pick.hou + 1) === item}" @click="pick.hou = index; houTime = $store.state.data.filter.zeroType(index);" :key="item">{{$store.state.data.filter.zeroType(index)}}</div>
-          </li>
-          <li>
-            <div v-for="(item, index) in minLength" :class="{'on' : (pick.min + 1) === item}" @click="pick.min = index; minTime = $store.state.data.filter.zeroType(index);" :key="item">{{$store.state.data.filter.zeroType(index)}}</div>
-          </li>
-          <li v-if="second">
-            <div v-for="(item, index) in secLength" :class="{'on' : (pick.sec + 1) === item}" @click="pick.sec = index; secTime = $store.state.data.filter.zeroType(index + 1);" :key="item">{{$store.state.data.filter.zeroType(index)}}</div>
-          </li>
-        </ul> -->
       </div>
       <div class="btn clearfix">
         <span v-if="!showMin || !showSec">

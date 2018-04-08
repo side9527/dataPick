@@ -64,10 +64,42 @@ export default {
   },
 
   methods: {
+    zeroType (n) {
+      return (n > 9) ? n : '0' + n
+    },
+    nowTime (num, j) {
+      let options = {}
+      options.sign = 'yyyy-MM-dd HH:mm:ss'
+      let _complete = n => {
+        return (n > 9) ? n : '0' + n
+      }
+      let d = new Date()
+      if (num) {
+        let newtimems = d.getTime() - (num * 24 * 60 * 60 * 1000)
+        d.setTime(newtimems)
+      }
+      let year = d.getFullYear()
+      let month = _complete(d.getMonth() + 1)
+      let day = _complete(d.getDate())
+      let hours = _complete(d.getHours())
+      let minutes = _complete(d.getMinutes())
+      let second = _complete(d.getSeconds())
+      let result = options.sign
+      result = result.replace('yyyy', year)
+      result = result.replace('MM', month)
+      result = result.replace('dd', day)
+      result = result.replace('HH', hours)
+      result = result.replace('mm', minutes)
+      result = result.replace('ss', second)
+      if (!j) {
+        result = result.substring(0, result.length - 3)
+      }
+      return result
+    },
     outputTime () {
       let self = this
       let pickTime = ''
-      let zeroType = self.$store.state.data.filter.zeroType
+      let zeroType = self.zeroType
       if (self.minute) {
         pickTime = self.second ? `${self.time.year}-${zeroType(self.time.month)}-${zeroType(self.time.day)} ${zeroType(self.time.hou)}:${zeroType(self.time.min)}:${zeroType(self.time.sec)}` : `${self.time.year}-${zeroType(self.time.month)}-${zeroType(self.time.day)} ${zeroType(self.time.hou)}:${zeroType(self.time.min)}`
       } else {
@@ -78,29 +110,29 @@ export default {
     houTest () {
       let self = this
       if (+self.houTime > 24 || +self.houTime < 0) {
-        self.houTime = self.$store.state.data.filter.zeroType(+self.pick.hou)
+        self.houTime = self.zeroType(+self.pick.hou)
       }
-      self.houTime = self.$store.state.data.filter.zeroType(+self.houTime)
+      self.houTime = self.zeroType(+self.houTime)
       self.pick.hou = +self.houTime
     },
     minTest () {
       let self = this
       if (+self.minTime > 59 || +self.minTime < 0) {
-        self.minTime = self.$store.state.data.filter.zeroType(+self.pick.min)
+        self.minTime = self.zeroType(+self.pick.min)
       }
-      self.minTime = self.$store.state.data.filter.zeroType(+self.minTime)
+      self.minTime = self.zeroType(+self.minTime)
       self.pick.min = +self.minTime
     },
     secTest () {
       let self = this
       if (+self.secTime > 59 || +self.secTime < 0) {
-        self.secTime = self.$store.state.data.filter.zeroType(+self.pick.sec)
+        self.secTime = self.zeroType(+self.pick.sec)
       }
-      self.secTime = self.$store.state.data.filter.zeroType(+self.secTime)
+      self.secTime = self.zeroType(+self.secTime)
       self.pick.sec = +self.secTime
     },
     pickOver () {
-      this.time.day = this.pick.day
+      this.time.day = this.pick.day ? this.pick.day : 1
       this.time.year = this.pick.year
       this.time.month = this.pick.month
       this.time.hou = this.pick.hou ? this.pick.hou : 0
@@ -135,12 +167,6 @@ export default {
       }
       self.time.year = self.pick.year
       self.time.month = self.pick.month
-      // if (self.minute) {
-      //   self.minFlag = true
-      // } else {
-      //   self.outputTime()
-      //   self.flag = false
-      // }
     },
     pickYear (i) {
       this.pick.year = i
@@ -180,7 +206,7 @@ export default {
     },
     initDate (key, i, j) {
       let self = this
-      let rawTime = self.dateTime ? self.dateTime : self.$store.state.data.comFun.nowTime()
+      let rawTime = self.dateTime ? self.dateTime : self.nowTime()
       let nowDate = new Date(rawTime.replace('-', '/'))
       if (!key) {
         self.time.year = nowDate.getFullYear()
@@ -201,9 +227,9 @@ export default {
         self.pick.sec = self.time.sec
         self.pick.year = self.time.year
         self.pick.month = self.time.month
-        self.houTime = self.$store.state.data.filter.zeroType(self.time.hou)
-        self.minTime = self.$store.state.data.filter.zeroType(self.time.min)
-        self.secTime = self.$store.state.data.filter.zeroType(self.time.sec)
+        self.houTime = self.zeroType(self.time.hou)
+        self.minTime = self.zeroType(self.time.min)
+        self.secTime = self.zeroType(self.time.sec)
       }
       if (key === 'year') nowDate.setFullYear(i)
       if (key === 'month') nowDate.setMonth(i - 1)
